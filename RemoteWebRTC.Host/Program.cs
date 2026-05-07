@@ -140,7 +140,10 @@ internal sealed class WgcToWebRtcStreamer : IAsyncDisposable
                 return;
             }
 
-            _framePool?.FrameArrived -= OnFrameArrived;
+            if (_framePool is not null)
+            {
+                _framePool.FrameArrived -= OnFrameArrived;
+            }
 
             if (_streamCts is not null)
             {
