@@ -11,11 +11,11 @@
 
 ## P1 — Stability, memory, and performance
 
-- [ ] Replace `Timer` with backpressure-aware capture/encode loop (`Channel<T>` or bounded queue) to avoid frame pileup and GC pressure under load.
-- [ ] Add cancellation tokens and idempotent lifecycle management (`StartAsync`/`StopAsync`) to prevent double-start/double-dispose races.
+- [x] Replace `Timer` with backpressure-aware capture/encode loop (`Channel<T>` or bounded queue) to avoid frame pileup and GC pressure under load. ✅ Completed 2026-05-07 (bounded `Channel<RawFrame>` + `PeriodicTimer` dummy producer + single consumer encoder loop).
+- [x] Add cancellation tokens and idempotent lifecycle management (`StartAsync`/`StopAsync`) to prevent double-start/double-dispose races. ✅ Completed 2026-05-07 (`SemaphoreSlim` lifecycle gate, linked CTS, atomic started flag, idempotent start/stop).
 - [ ] Implement frame-drop policy (latest-frame wins), adaptive bitrate/framerate/resolution based on RTCP feedback.
 - [ ] Add end-to-end metrics: encode latency, queue depth, dropped frames, RTT, packet loss, jitter, client render delay.
-- [ ] Add structured logging + redaction (no SDP secrets, no PII in logs) and centralized correlation IDs.
+- [~] Add structured logging + redaction (no SDP secrets, no PII in logs) and centralized correlation IDs. 🚧 Partial 2026-05-07 (timestamped host log lines added; redaction and correlation IDs still pending).
 - [ ] Validate GPU memory lifecycle for D3D resources and ensure zero-copy invariants are actually preserved.
 
 ## P2 — Product UX and operational maturity
@@ -32,3 +32,10 @@
 - [ ] Add secure remote control channel (if product requires input control) with strict least-privilege and event signing.
 - [ ] Introduce role-based tenant isolation and policy engine for enterprise deployments.
 - [ ] Publish threat model + periodic penetration testing program + coordinated vulnerability disclosure process.
+
+
+## Running change log
+
+- 2026-05-07: Completed P1 queue/backpressure foundation in host runtime using bounded channel and latest-frame-wins behavior (drop oldest).
+- 2026-05-07: Completed P1 lifecycle hardening with idempotent `StartAsync`/`StopAsync`, linked cancellation, and cleaner shutdown sequencing.
+- 2026-05-07: Added baseline timestamped host logging to support future structured logging and correlation work.
