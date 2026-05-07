@@ -94,11 +94,16 @@ internal sealed class WgcToWebRtcStreamer : IDisposable
         _captureSession = _framePool.CreateCaptureSession(item);
         _framePool.FrameArrived += OnFrameArrived;
         _captureSession.StartCapture();
-
         return Task.CompletedTask;
     }
 
     public Task StopAsync()
+    {
+        StopInternal();
+        return Task.CompletedTask;
+    }
+
+    private void StopInternal()
     {
         if (_framePool is not null)
         {
@@ -109,8 +114,6 @@ internal sealed class WgcToWebRtcStreamer : IDisposable
         _captureSession?.Dispose();
         _framePool?.Dispose();
         _peerConnection.Close("Host stopped");
-
-        return Task.CompletedTask;
     }
 
 
@@ -136,7 +139,7 @@ internal sealed class WgcToWebRtcStreamer : IDisposable
 
     public void Dispose()
     {
-        _ = StopAsync();
+        StopInternal();
     }
 }
 
