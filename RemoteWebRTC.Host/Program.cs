@@ -24,6 +24,8 @@ internal static class Program
 
 internal sealed class WgcToWebRtcStreamer : IDisposable
 {
+    private const int TargetFrameIntervalMs = 33;
+
     private readonly RTCPeerConnection _peerConnection;
     private readonly MediaStreamTrack _videoTrack;
     private readonly DummyNvencBridge _nvencBridge;
@@ -115,7 +117,7 @@ internal sealed class WgcToWebRtcStreamer : IDisposable
     private void StartDummyFrameLoop(string reason)
     {
         Console.WriteLine($"[host] {reason}");
-        _dummyTimer = new Timer(_ => _nvencBridge.EmitTestFrame(), null, TimeSpan.Zero, TimeSpan.FromMilliseconds(33));
+        _dummyTimer = new Timer(_ => _nvencBridge.EmitTestFrame(), null, TimeSpan.Zero, TimeSpan.FromMilliseconds(TargetFrameIntervalMs));
     }
 
     private void OnFrameArrived(Direct3D11CaptureFramePool sender, object args)
@@ -140,8 +142,6 @@ internal sealed class WgcToWebRtcStreamer : IDisposable
 
 internal sealed class DummyNvencBridge
 {
-    private int _targetBitrateBps = 1_000_000;
-
     public event Action<uint, byte[]>? OnEncodedAccessUnit;
 
     public void EncodeSurface(IDirect3DSurface surface, int width, int height)
@@ -161,10 +161,6 @@ internal sealed class DummyNvencBridge
         var fakeNal = new byte[] { 0x00, 0x00, 0x00, 0x01, 0x09, 0x10 };
         OnEncodedAccessUnit?.Invoke(3000, fakeNal);
     }
-
-    public void IncreaseBitrate() => _targetBitrateBps = Math.Min(15_000_000, _targetBitrateBps + 250_000);
-
-    public void DecreaseBitrate() => _targetBitrateBps = Math.Max(1_000_000, _targetBitrateBps - 250_000);
 
     public void EmitTestFrame()
     {
