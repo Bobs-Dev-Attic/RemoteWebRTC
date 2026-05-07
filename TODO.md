@@ -21,7 +21,7 @@
 ## P2 — Product UX and operational maturity
 
 - [ ] Implement host capture source picker with explicit consent prompts and persistent indicator that capture is active.
-- [ ] Improve Flutter viewer UX states: loading, reconnecting, no-signal, permission denied, and actionable error banners.
+- [x] Improve Flutter viewer UX states: loading, reconnecting, no-signal, permission denied, and actionable error banners. ✅ Completed 2026-05-07 (status enum + overlay states + optional retry action).
 - [ ] Add observability dashboards + SLOs (startup time, stream join success, stall rate, crash-free sessions).
 - [ ] Build CI gates: unit tests, integration tests (host+client), dependency/license scans, static analysis, formatting checks.
 - [ ] Add TURN (not only STUN) for NAT traversal reliability; evaluate managed TURN services for global performance.
@@ -31,7 +31,7 @@
 - [ ] Evaluate codec roadmap (H.264 baseline/main vs AV1/H.265 where licensed/permitted).
 - [ ] Add secure remote control channel (if product requires input control) with strict least-privilege and event signing.
 - [ ] Introduce role-based tenant isolation and policy engine for enterprise deployments.
-- [ ] Publish threat model + periodic penetration testing program + coordinated vulnerability disclosure process.
+- [~] Publish threat model + periodic penetration testing program + coordinated vulnerability disclosure process. 🚧 Partial 2026-05-07 (security process and disclosure policy added in README; formal threat model document and pentest cadence still pending).
 
 
 ## Running change log
@@ -39,3 +39,6 @@
 - 2026-05-07: Completed P1 queue/backpressure foundation in host runtime using bounded channel and latest-frame-wins behavior (drop oldest).
 - 2026-05-07: Completed P1 lifecycle hardening with idempotent `StartAsync`/`StopAsync`, linked cancellation, and cleaner shutdown sequencing.
 - 2026-05-07: Added baseline timestamped host logging to support future structured logging and correlation work.
+
+- 2026-05-07: Completed P2 Flutter viewer state UX overlays for loading/reconnecting/no-signal/permission-denied/error with optional retry action.
+- 2026-05-07: Added initial P3 security operations policy notes (vulnerability disclosure and penetration testing cadence expectations) to README.
